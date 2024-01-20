@@ -60,11 +60,11 @@ abstract class Builder {
     /**
      * Finds a value from the source object/array using the array of keys
      *
-     * @param  int|string  $key          The key/property within the array/object
-     * @param  array       $source       The source to look for data within
-     * @param  bool        $accept_empty When true, non-null empty values will
-     *                                   be considered found, otherwise we
-     *                                   consider not empty as found.
+     * @param  array  $keys          The key/property within the array/object
+     * @param  array  $source        The source to look for data within
+     * @param  bool   $accept_empty  When true, non-null empty values will
+     *                               be considered found, otherwise we
+     *                               consider not empty as found.
      *
      * @return     mixed   The value.
      */
