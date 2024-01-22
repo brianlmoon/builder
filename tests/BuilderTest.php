@@ -31,6 +31,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase {
         $car2 = clone $car;
         $car2->license_number = null;
 
+        $car3 = clone $car;
+        $car3->capacity = 0;
+
         return [
 
             'Simple' => [
@@ -41,6 +44,15 @@ class BuilderTest extends \PHPUnit\Framework\TestCase {
                     'license_number' => 'ASDF1234',
                 ],
                 $car
+            ],
+
+            'Missing Data' => [
+                CarBuilder::class,
+                [
+                    'color'          => 'blue',
+                    'license_number' => 'ASDF1234',
+                ],
+                $car3
             ],
 
             'Simple Object Input' => [
