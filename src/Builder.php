@@ -54,13 +54,15 @@ abstract class Builder {
      */
     protected function setValue(object $obj, string $key, array|object $data, array $data_key = [], bool $accept_empty = true): void {
         array_push($data_key, $key);
-        $value = $this->findValue($data_key, $data, $accept_empty);
         try {
+            $value = $this->findValue($data_key, $data, $accept_empty);
             $obj->$key = $value;
         } catch (\TypeError $e) {
             if ($value !== null) {
                 throw $e;
             }
+        } catch (KeyNotFoundException $e) {
+            // noop for this one
         }
     }
 
@@ -77,13 +79,21 @@ abstract class Builder {
      */
     protected function findValue(array $keys, array|object $source, bool $accept_empty = true): mixed {
         $value = null;
+        $key_found = false;
         foreach ($keys as $key) {
-            $value = $this->getValue($key, $source);
-            if ($value !== null) {
-                if (!empty($value) || $accept_empty) {
-                    break;
+            if ($this->keyExists($key, $source)) {
+                $key_found = true;
+                $value = $this->getValue($key, $source);
+                if ($value !== null) {
+                    if (!empty($value) || $accept_empty) {
+                        break;
+                    }
                 }
             }
+        }
+
+        if (!$key_found) {
+            throw new KeyNotFoundException("Keys " . implode(", ", $keys) . " not found");
         }
 
         return $value;
@@ -106,5 +116,23 @@ abstract class Builder {
         }
 
         return $value;
+    }
+
+    /**
+     * Checks if the source has the provided key
+     *
+     * @param      int|string  $key    The key/property within the array/object
+     * @param      array       $source The source to look for data within
+     *
+     * @return     bool
+     */
+    protected function keyExists(int|string $key, array|object $source): bool {
+        return (
+            is_array($source) &&
+            array_key_exists($key, $source)
+        ) || (
+            is_object($source) &&
+            property_exists($source, $key)
+        );
     }
 }

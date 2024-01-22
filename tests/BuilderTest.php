@@ -55,6 +55,16 @@ class BuilderTest extends \PHPUnit\Framework\TestCase {
                 $car3
             ],
 
+            'Null Data' => [
+                CarBuilder::class,
+                [
+                    'color'          => 'blue',
+                    'capacity'       => null,
+                    'license_number' => 'ASDF1234',
+                ],
+                $car3
+            ],
+
             'Simple Object Input' => [
                 CarBuilder::class,
                 (object)[
