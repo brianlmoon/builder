@@ -54,6 +54,7 @@ abstract class Builder {
      */
     protected function setValue(object $obj, string $key, array|object $data, array $data_key = [], bool $accept_empty = true): void {
         array_push($data_key, $key);
+        $value = null;
         try {
             $value = $this->findValue($data_key, $data, $accept_empty);
             $obj->$key = $value;
@@ -61,7 +62,7 @@ abstract class Builder {
             if ($value !== null) {
                 throw $e;
             }
-        } catch (KeyNotFoundException $e) {
+        } catch (KeyNotFoundException $e) { // @phan-suppress-current-line PhanUnusedVariableCaughtException
             // noop for this one
         }
     }
