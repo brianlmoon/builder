@@ -6,18 +6,17 @@ use Moonspot\Builder\Tests\TestClasses\Car;
 use Moonspot\Builder\Tests\TestClasses\Fleet;
 use Moonspot\Builder\Tests\TestClasses\Builder\Car as CarBuilder;
 use Moonspot\Builder\Tests\TestClasses\Builder\Fleet as FleetBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BuilderTest extends \PHPUnit\Framework\TestCase {
 
-    /**
-     * @dataProvider createData
-     */
+    #[DataProvider('createData')]
     public function testCreate($class, $input, $expect) {
         $obj = $class::build($input);
         $this->assertEquals($expect, $obj);
     }
 
-    public function createData() {
+    public static function createData() {
 
         $car                 = new Car();
         $car->color          = 'blue';
